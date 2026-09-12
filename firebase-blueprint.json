@@ -1,0 +1,106 @@
+{
+  "entities": {
+    "Organization": {
+      "title": "Organization",
+      "description": "A business organization using the platform.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Legal name of the organization." },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "adminUid": { "type": "string", "description": "UID of the primary administrator." }
+      },
+      "required": ["name", "createdAt", "adminUid"]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User account details and role within an organization.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "organizationId": { "type": "string" },
+        "role": { "type": "string", "enum": ["Admin", "RiskManager", "Analyst", "Viewer"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "organizationId", "role"]
+    },
+    "Asset": {
+      "title": "Asset",
+      "description": "A business asset exposed to risk.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "description": "e.g., Website, Server, Database" },
+        "criticality": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "businessOwner": { "type": "string" },
+        "technicalOwner": { "type": "string" },
+        "organizationId": { "type": "string" },
+        "status": { "type": "string", "enum": ["Active", "Inactive", "Retired"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "criticality", "organizationId", "status"]
+    },
+    "Risk": {
+      "title": "Risk",
+      "description": "A cybersecurity risk scenario.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "assetId": { "type": "string" },
+        "threat": { "type": "string" },
+        "vulnerability": { "type": "string" },
+        "impact": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "likelihood": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "score": { "type": "integer" },
+        "status": { "type": "string", "enum": ["Open", "UnderTreatment", "Mitigated", "Accepted", "Avoided", "Transferred"] },
+        "treatmentPlan": { "type": "string" },
+        "ownerUid": { "type": "string" },
+        "organizationId": { "type": "string" },
+        "dueDate": { "type": "string", "format": "date" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "assetId", "impact", "likelihood", "score", "status", "organizationId"]
+    },
+    "Action": {
+      "title": "Remediation Action",
+      "description": "A specific task to mitigate a risk.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "riskId": { "type": "string" },
+        "ownerUid": { "type": "string" },
+        "priority": { "type": "string", "enum": ["Low", "Medium", "High", "Critical"] },
+        "status": { "type": "string", "enum": ["Pending", "InProgress", "Completed", "Overdue"] },
+        "dueDate": { "type": "string", "format": "date" },
+        "completion": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "organizationId": { "type": "string" }
+      },
+      "required": ["title", "riskId", "status", "organizationId"]
+    }
+  },
+  "firestore": {
+    "/organizations/{orgId}": {
+      "schema": "Organization",
+      "description": "Root collection for organizations."
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Public user profiles."
+    },
+    "/organizations/{orgId}/assets/{assetId}": {
+      "schema": "Asset",
+      "description": "Assets belonging to an organization."
+    },
+    "/organizations/{orgId}/risks/{riskId}": {
+      "schema": "Risk",
+      "description": "Risks belonging to an organization."
+    },
+    "/organizations/{orgId}/actions/{actionId}": {
+      "schema": "Action",
+      "description": "Remediation actions belonging to an organization."
+    }
+  }
+}

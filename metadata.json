@@ -1,0 +1,6 @@
+{
+  "name": "CRRD — Cyber Risk & Business Risk Management Platform",
+  "description": "A business-focused cybersecurity risk management platform that helps organizations understand, prioritize, treat, and communicate cyber risk.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
